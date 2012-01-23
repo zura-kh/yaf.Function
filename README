@@ -1,0 +1,89 @@
+Version: 1.0
+
+
+yaf::Function - generic representation of a callable entity.
+Similar to Boost.Function and Loki::Function, but with only two standalone header files.
+
+Author:
+    Zurab Khetsuriani (zura.khetsuriani 'at gmail.com)
+
+License:
+    Boost Software License - Version 1.0 (See BOOST_LICENSE_1_0.txt)
+    
+Files:
+    Function.h      - public header file, the only file used in the client code.
+    Function_impl.h - private header file.
+    main.cpp        - usage examples and tests.
+    
+Usage:
+
+#include "Function.h"
+
+yaf::Function<Signature> func;
+
+Where Signature is any function signature with up to 7 parameters.
+Given above, func can be assigned any callable entity with a corresponding signature, which are:
+1. Free functions
+2. Member functions (via constructor or yaf::mem_fun helper function)
+3. Functors (objects with operator()), copied by value
+ 
+When Signature has one or two parameters, yaf::Function<Signature> class is publicly derived
+from std::unary_function or std::binary_function respectively.
+ 
+Examples:
+
+// free function
+int get_sum(int a, int b)
+{
+	return a + b;
+}
+
+
+// functor type
+struct MaxGetter {
+	int operator()(int a, int b) const
+	{
+		return std::max(a, b);
+	}
+};
+
+
+// some class
+class A {
+	int x;
+public:
+	// some non-const method (can be const as well)
+	int get_mul(int a, int b)
+	{
+		x = a * b;
+		return x;
+	}
+};
+
+
+
+yaf::Function<int (int, int)> func;
+
+func = get_sum;
+int sum = func(1, 2);
+
+MaxGetter max_getter_functor;
+func = max_getter_functor;
+int max = func(10, 15);
+
+A a;
+func = yaf::mem_fun(&a, &A::get_mul);
+int mul = func(3, 4);
+
+if (func) // if func is not empty
+	func(1, 2);
+
+
+yaf::Function<int (int, int)> func2;
+
+// swap with func2 (has the same signature)
+func.swap(func2);
+yaf::swap(func, func2);
+
+// assign
+func = func2;

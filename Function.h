@@ -73,7 +73,7 @@ A a;
 func = yaf::mem_fun(&a, &A::get_mul);
 int mul = func(3, 4);
 
-if (func) // if func is not empty
+if (func) // if func is not empty, same as: !func.empty()
 	func(1, 2);
 
 
@@ -85,6 +85,16 @@ yaf::swap(func, func2);
 
 // assign
 func = func2;
+
+
+yaf::Function<int (int)> fempty; // empty yaf::Function
+
+try {
+	fempty(10);
+
+} catch (const yaf::bad_function_call& e) {
+	std::cerr << "Exception: " << e.what() << std::endl;
+}
 
 */
 
@@ -116,19 +126,19 @@ public:
 		// primary templates
 
 		// base
-		template <class Signature>
+		template <typename Signature>
 		class InvokerBase;
 
 		// free function
-		template <class Signature>
+		template <typename Signature>
 		class FunctionInvoker;
 
 		// functor
-		template <class Functor, class Signature>
+		template <class Functor, typename Signature>
 		class FunctorInvoker;
 		
 		// member function
-		template <class ObjectPtr, class Method, typename Signature>
+		template <class ObjectPtr, typename Method, typename Signature>
 		class MemberFunctionInvoker;
 
 
@@ -154,7 +164,7 @@ class Function;
 
 
 // Function swap
-template<class Sig>
+template<typename Sig>
 void swap(Function<Sig>& lhs, Function<Sig>& rhs)
 {
 	lhs.swap(rhs);

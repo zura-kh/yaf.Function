@@ -115,9 +115,12 @@ int main()
 
 	try {
 		fempty(10);
+
 	} catch (const yaf::bad_function_call& e) {
 		std::cerr << "Exception: " << e.what() << std::endl;
 	}
+	
+	assert(static_cast<bool>(fempty) == !fempty.empty());
 	
 
 	yaf::Function<int ()> ffunc1 = func1, ffunc2 = func2;

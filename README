@@ -27,8 +27,8 @@ Given above, func can be assigned any callable entity with a corresponding signa
 2. Member functions (via constructor or yaf::mem_fun helper function)
 3. Functors (objects with operator()), copied by value
  
-When Signature has one or two parameters, yaf::Function<Signature> class is publicly derived
-from std::unary_function or std::binary_function respectively.
+When Signature has one or two parameters, yaf::Function<Signature> class is
+publicly derived from std::unary_function or std::binary_function respectively.
  
 Examples:
 
@@ -75,7 +75,7 @@ A a;
 func = yaf::mem_fun(&a, &A::get_mul);
 int mul = func(3, 4);
 
-if (func) // if func is not empty
+if (func) // if func is not empty, same as: !func.empty()
 	func(1, 2);
 
 
@@ -87,3 +87,14 @@ yaf::swap(func, func2);
 
 // assign
 func = func2;
+
+
+yaf::Function<int (int)> fempty; // empty yaf::Function
+
+try {
+	fempty(10);
+
+} catch (const yaf::bad_function_call& e) {
+	std::cerr << "Exception: " << e.what() << std::endl;
+}
+

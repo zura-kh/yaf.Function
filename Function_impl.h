@@ -100,7 +100,7 @@ Function<YAF_SIGNATURE_SPEC> mem_fun(const T* obj, ReturnType (T::*method)(YAF_F
 
 
 		// member function
-		template <class ObjectPtr, class Method, YAF_TEMPLATE_ARG_LIST>
+		template <class ObjectPtr, typename Method, YAF_TEMPLATE_ARG_LIST>
 		class MemberFunctionInvoker<ObjectPtr, Method, YAF_SIGNATURE_SPEC>: public InvokerBase<YAF_SIGNATURE_SPEC> {
 		public:
 
@@ -152,7 +152,7 @@ public:
 	Function(const Functor& functor): m_invoker(new impl::FunctorInvoker<Functor, Signature>(functor)) {}
 
 	/// member function
-	template <class ObjectPtr, class Method>
+	template <class ObjectPtr, typename Method>
 	Function(const ObjectPtr& obj, Method method):
 	m_invoker(new impl::MemberFunctionInvoker<ObjectPtr, Method, Signature>(obj, method)) {}
 

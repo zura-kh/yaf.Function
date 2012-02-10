@@ -71,6 +71,11 @@ struct SomeClass {
 		std::cout << "SomeClass::get_int is called with arguments: " << d << ", " << c << std::endl;
 		return 50;
 	}
+
+	void method_with_ref_arg(int& i) const
+	{
+		i = 17;
+	}
 };
 
 
@@ -132,6 +137,12 @@ int main()
 
 	ffunc2 = ffunc1; // assignement
 	assert(ffunc2() == ffunc1());
+
+
+	yaf::Function<void (int&)> fwithref = yaf::mem_fun(&obj, &SomeClass::method_with_ref_arg);
+	int i = 0;
+	fwithref(i);
+	assert(i == 17);
 
 	std::cout << "* Success *" << std::endl;
 
